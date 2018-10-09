@@ -1,2 +1,2 @@
-## RabbitMQ & SpringBoot
+## RabbitMQ & SpringAMQP
 code is still writing
