@@ -4,6 +4,7 @@ import com.qcz.rabbitmq.convert.ImageMessageConverter;
 import com.qcz.rabbitmq.convert.PDFMessageConverter;
 import com.qcz.rabbitmq.convert.TextMessageConverter;
 import com.qcz.rabbitmq.listener.MessageDelegate;
+import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -13,6 +14,7 @@ import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter;
 import org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.SimpleMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,6 +41,8 @@ public class RabbitMQConfig {
         connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
         connectionFactory.setChannelCacheSize(globals.getChannelCacheSize());
         connectionFactory.setChannelCheckoutTimeout(globals.getChannelCheckoutTimeOut());
+        connectionFactory.setPublisherConfirms(true);
+        connectionFactory.setPublisherReturns(true);
         return connectionFactory;
     }
 
@@ -52,8 +56,9 @@ public class RabbitMQConfig {
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setExchange("exchange01");
-        rabbitTemplate.setRoutingKey("simple.routing");
+        rabbitTemplate.setMandatory(true);
+//        rabbitTemplate.setExchange("exchange01");
+//        rabbitTemplate.setRoutingKey("simple.routing");
         return rabbitTemplate;
     }
 
@@ -111,11 +116,10 @@ public class RabbitMQConfig {
         // Convert3: 全局转换器
         ContentTypeDelegatingMessageConverter converter = new ContentTypeDelegatingMessageConverter();
 
-        TextMessageConverter textMessageConverter = new TextMessageConverter();
-        converter.addDelegate("text", textMessageConverter);
-        converter.addDelegate("html/text", textMessageConverter);
-        converter.addDelegate("xml/text", textMessageConverter);
-        converter.addDelegate("text/plain", textMessageConverter);
+        SimpleMessageConverter simpleMessageConverter = new SimpleMessageConverter();
+        converter.addDelegate("text", simpleMessageConverter);
+        converter.addDelegate("text/plain", simpleMessageConverter);
+        converter.addDelegate("application/x-java-serialized-object", simpleMessageConverter);
 
         Jackson2JsonMessageConverter jsonMessageConverter = new Jackson2JsonMessageConverter();
         DefaultJackson2JavaTypeMapper javaTypeMapper = new DefaultJackson2JavaTypeMapper();

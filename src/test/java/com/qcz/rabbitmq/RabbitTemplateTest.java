@@ -1,5 +1,6 @@
 package com.qcz.rabbitmq;
 
+import com.qcz.rabbitmq.pruducer.Sender;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.AmqpException;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,6 +23,9 @@ public class RabbitTemplateTest {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private Sender sender;
 
     @Test
     public void rabbitTemplateTest() {
@@ -60,6 +65,16 @@ public class RabbitTemplateTest {
 //            return message;
 //        });
 
+    }
+
+    @Test
+    public void returnCallbackTest() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("desc","test");
+        properties.put("sender","xiaoquan");
+        for(int i = 0; i < 100; i++) {
+            sender.send("Hello Rabbit", properties);
+        }
     }
 
 }
