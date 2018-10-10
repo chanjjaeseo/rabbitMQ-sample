@@ -13,6 +13,7 @@ import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter;
 import org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -25,16 +26,19 @@ import java.util.Map;
 @ComponentScan({"com.qcz.rabbitmq.*"})
 public class RabbitMQConfig {
 
+    @Autowired
+    private Globals globals;
+
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setVirtualHost("/");
-        connectionFactory.setAddresses("132.232.141.241");
-        connectionFactory.setUsername("xiaoquan");
-        connectionFactory.setPassword("xiaoquan123");
+        connectionFactory.setVirtualHost(globals.getVirtualHost());
+        connectionFactory.setAddresses(globals.getRabbitAddress());
+        connectionFactory.setUsername(globals.getUsername());
+        connectionFactory.setPassword(globals.getPassword());
         connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
-        connectionFactory.setChannelCacheSize(16);
-        connectionFactory.setChannelCheckoutTimeout(180);
+        connectionFactory.setChannelCacheSize(globals.getChannelCacheSize());
+        connectionFactory.setChannelCheckoutTimeout(globals.getChannelCheckoutTimeOut());
         return connectionFactory;
     }
 
@@ -114,7 +118,13 @@ public class RabbitMQConfig {
         converter.addDelegate("text/plain", textMessageConverter);
 
         Jackson2JsonMessageConverter jsonMessageConverter = new Jackson2JsonMessageConverter();
-        jsonMessageConverter.setJavaTypeMapper(new DefaultJackson2JavaTypeMapper);
+        DefaultJackson2JavaTypeMapper javaTypeMapper = new DefaultJackson2JavaTypeMapper();
+        javaTypeMapper.setTrustedPackages("*");
+        Map<String, Class<?>> idClassMapping = new HashMap<>();
+        idClassMapping.put("package", com.qcz.rabbitmq.pojo.Package.class);
+        idClassMapping.put("order", com.qcz.rabbitmq.pojo.Order.class);
+        javaTypeMapper.setIdClassMapping(idClassMapping);
+        jsonMessageConverter.setJavaTypeMapper(javaTypeMapper);
         converter.addDelegate("application/json", jsonMessageConverter);
         converter.addDelegate("json", jsonMessageConverter);
 
