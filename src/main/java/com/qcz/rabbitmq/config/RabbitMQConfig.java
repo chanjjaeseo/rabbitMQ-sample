@@ -11,6 +11,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter;
+import org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -78,7 +79,9 @@ public class RabbitMQConfig {
     @Bean
     public SimpleMessageListenerContainer simpleMessageListenerContainer(ConnectionFactory connectionFactory) {
         SimpleMessageListenerContainer container =  new SimpleMessageListenerContainer(connectionFactory);
+        // 监听的队列
         container.setQueueNames("queue01", "queue02");
+        // 启动后启动两个线程作为消费者
         container.setConcurrentConsumers(2);
         container.setPrefetchCount(3);
         // 默认实现的监听器去处理
@@ -92,7 +95,6 @@ public class RabbitMQConfig {
         // Convert1 : json => Map
 //        messageListenerAdapter.setMessageConverter(new Jackson2JsonMessageConverter());
         // Convert2 : json => Object
-
 //        Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter("*");
 //        DefaultJackson2JavaTypeMapper javaTypeMapper = new DefaultJackson2JavaTypeMapper();
 //        javaTypeMapper.setTrustedPackages("*");
@@ -112,6 +114,7 @@ public class RabbitMQConfig {
         converter.addDelegate("text/plain", textMessageConverter);
 
         Jackson2JsonMessageConverter jsonMessageConverter = new Jackson2JsonMessageConverter();
+        jsonMessageConverter.setJavaTypeMapper(new DefaultJackson2JavaTypeMapper);
         converter.addDelegate("application/json", jsonMessageConverter);
         converter.addDelegate("json", jsonMessageConverter);
 
