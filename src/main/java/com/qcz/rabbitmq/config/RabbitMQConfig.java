@@ -7,6 +7,7 @@ import com.qcz.rabbitmq.listener.MessageDelegate;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
@@ -86,6 +87,9 @@ public class RabbitMQConfig {
     @Bean
     public SimpleMessageListenerContainer simpleMessageListenerContainer(ConnectionFactory connectionFactory) {
         SimpleMessageListenerContainer container =  new SimpleMessageListenerContainer(connectionFactory);
+        // container会自动确认消息(emmm...我也不知道为啥)
+        // 如果你要手动确认消息实现 ChannelAwareMessageListener 然后绑到container的listener上
+//        container.setAcknowledgeMode(AcknowledgeMode.NONE);
         // 监听的队列
         container.setQueueNames("queue01", "queue02");
         // 启动后启动两个线程作为消费者
