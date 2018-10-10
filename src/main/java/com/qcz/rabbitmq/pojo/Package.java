@@ -33,4 +33,13 @@ public class Package {
 //    public void setSendTime(LocalDateTime sendTime) {
 //        this.sendTime = sendTime;
 //    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("id:")
+                .append(id)
+                .append(", desc:")
+                .append(desc).toString();
+    }
 }
