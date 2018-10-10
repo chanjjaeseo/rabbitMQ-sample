@@ -24,51 +24,48 @@ public class Globals {
     @Value("${spring.rabbitmq.cache.channel.checkout-timeout:180}")
     private int channelCheckoutTimeOut;
 
+    @Value("${spring.rabbitmq.publisher-confirms}")
+    private boolean publisherConfirms;
+
+    @Value("${spring.rabbitmq.publisher-returns}")
+    private boolean publisherReturns;
+
+    @Value("${spring.rabbitmq.template.mandatory}")
+    private boolean mandatory;
+
     public String getRabbitAddress() {
         return rabbitAddress;
-    }
-
-    public void setRabbitAddress(String rabbitAddress) {
-        this.rabbitAddress = rabbitAddress;
     }
 
     public String getVirtualHost() {
         return virtualHost;
     }
 
-    public void setVirtualHost(String virtualHost) {
-        this.virtualHost = virtualHost;
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public int getChannelCacheSize() {
         return channelCacheSize;
-    }
-
-    public void setChannelCacheSize(int channelCacheSize) {
-        this.channelCacheSize = channelCacheSize;
     }
 
     public int getChannelCheckoutTimeOut() {
         return channelCheckoutTimeOut;
     }
 
-    public void setChannelCheckoutTimeOut(int channelCheckoutTimeOut) {
-        this.channelCheckoutTimeOut = channelCheckoutTimeOut;
+    public boolean isPublisherConfirms() {
+        return publisherConfirms;
+    }
+
+    public boolean isPublisherReturns() {
+        return publisherReturns;
+    }
+
+    public boolean isMandatory() {
+        return mandatory;
     }
 }

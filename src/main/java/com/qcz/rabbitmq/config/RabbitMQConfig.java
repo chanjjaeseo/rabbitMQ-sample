@@ -41,8 +41,8 @@ public class RabbitMQConfig {
         connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
         connectionFactory.setChannelCacheSize(globals.getChannelCacheSize());
         connectionFactory.setChannelCheckoutTimeout(globals.getChannelCheckoutTimeOut());
-        connectionFactory.setPublisherConfirms(true);
-        connectionFactory.setPublisherReturns(true);
+        connectionFactory.setPublisherConfirms(globals.isPublisherConfirms());
+        connectionFactory.setPublisherReturns(globals.isPublisherReturns());
         return connectionFactory;
     }
 
@@ -56,9 +56,7 @@ public class RabbitMQConfig {
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMandatory(true);
-//        rabbitTemplate.setExchange("exchange01");
-//        rabbitTemplate.setRoutingKey("simple.routing");
+        rabbitTemplate.setMandatory(globals.isMandatory());
         return rabbitTemplate;
     }
 
