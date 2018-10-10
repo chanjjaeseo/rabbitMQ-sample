@@ -32,20 +32,20 @@ public class RabbitMQConfig {
     @Autowired
     private Globals globals;
 
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setVirtualHost(globals.getVirtualHost());
-        connectionFactory.setAddresses(globals.getRabbitAddress());
-        connectionFactory.setUsername(globals.getUsername());
-        connectionFactory.setPassword(globals.getPassword());
-        connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
-        connectionFactory.setChannelCacheSize(globals.getChannelCacheSize());
-        connectionFactory.setChannelCheckoutTimeout(globals.getChannelCheckoutTimeOut());
-        connectionFactory.setPublisherConfirms(globals.isPublisherConfirms());
-        connectionFactory.setPublisherReturns(globals.isPublisherReturns());
-        return connectionFactory;
-    }
+//    @Bean
+//    public ConnectionFactory connectionFactory() {
+//        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+//        connectionFactory.setVirtualHost(globals.getVirtualHost());
+//        connectionFactory.setAddresses(globals.getRabbitAddress());
+//        connectionFactory.setUsername(globals.getUsername());
+//        connectionFactory.setPassword(globals.getPassword());
+//        connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
+//        connectionFactory.setChannelCacheSize(globals.getChannelCacheSize());
+//        connectionFactory.setChannelCheckoutTimeout(globals.getChannelCheckoutTimeOut());
+//        connectionFactory.setPublisherConfirms(globals.isPublisherConfirms());
+//        connectionFactory.setPublisherReturns(globals.isPublisherReturns());
+//        return connectionFactory;
+//    }
 
     @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
