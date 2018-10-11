@@ -84,7 +84,7 @@ MessageListenerContainer => MessageConvert.fromMessage();
 
 指定消息监听的方法，一般搭配@RabbitHandler实现
 
-@RabbitListener依赖ListenerContainerFacotory，如果想指定listener的其他信息如：listner接收时消息是什么类型的，可用@Bean的方式用自己的
+@RabbitListener依赖ListenerContainerFacotory，如果想指定listener的其他信息如：listener接收时消息是什么类型的，可用@Bean的方式用自己的
 ListenerContainerFatory。
 
 ### @RabbitHandler
