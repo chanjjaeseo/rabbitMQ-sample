@@ -52,25 +52,23 @@ SimpleMessageConverter(): 转化简单的消息格式
 
 支持以下 Java 类型：
 
-String：contentType 设置为 text/plain
+- String：contentType 设置为 text/plain
 
-Serializable：contentType 设置为 application/x-java-serialized-object，body 为对象序列化得到的 byte[]
+- Serializable：contentType 设置为 application/x-java-serialized-object，body 为对象序列化得到的 byte[]
 
 除此之外的其他contentType用此转换器解码原样返回byte[]字节码
 
 
 JacksonToJsonMessageConverter(): json格式转换成Java对象转换器
 
-一般用下面的消息转换器
+  一般用下面的消息转换器
 
-DefaultJsonToJaveTypeMapper(): json格式和java对象映射器
+  DefaultJsonToJaveTypeMapper(): json格式和java对象映射器
 
-(如果不在消息头内指定__TypeId__, JavaType默认转化为Object)
+  (如果不在消息头内指定__TypeId__, JavaType默认转化为Object)
 
 
-消息发送者调用toMessage方法把非Message的对象转换成Message,
-
-消息接收者接收到消息调用fromMessage从获取消息并完成消费操作，如下。
+消息发送者调用toMessage方法把非Message的对象转换成Message, 消息接收者接收到消息调用fromMessage从获取消息并完成消费操作，如下。
 
 发送者
 
