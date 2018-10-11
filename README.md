@@ -93,11 +93,11 @@ ListenerContainerFatory。
 
 ### 生产环境的使用方法
 
-发送端
+发送端:
 
 一般用RabbitTempldate发送消息(注意指定MessageConvert和接收端一致)
 
-接收端
+接收端: 
 
 指定MessageListenerContainer（设置符合自己需求配置）
 
