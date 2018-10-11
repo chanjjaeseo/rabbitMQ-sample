@@ -1,6 +1,6 @@
 ## RabbitMQ & SpringAMQP
 
-###ConnectionFactory
+### ConnectionFactory
 如果没有注入，rabbitMQ将采用application.properties的设置自动注入一个ConnectionFactory
 
 ### RabbitAdmin
