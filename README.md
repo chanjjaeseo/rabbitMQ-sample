@@ -1,14 +1,12 @@
 ## RabbitMQ & SpringAMQP
 
 ### ConnectionFactory
+
 如果没有注入，rabbitMQ将采用application.properties的设置自动注入一个ConnectionFactory
 
 ### RabbitAdmin
-需要@Bean注入,并指定autoStartup为true
 
-作用： 对MQ的Queue Exchange Binding操作  (如声明)
-
-用法：
+> 对MQ的Queue Exchange Binding操作  (如声明), 需要@Bean注入,并指定autoStartup为true
 
 autoStartup必须设置为true,否则Spring容器不会加载RabbitAdmin类。
 
@@ -18,17 +16,13 @@ RabbitAdmin底层实现是从Spring容器中获取Exchange、Binding、RoutingKe
 
 ### RabbitTemplate
 
-需要@Bean注入
-
-作用: 发送消息
-
-与SpringAMQP整合时候发送消息的关键类
+> RabbitTemplate 是一个发送消息的模板。
 
 提供了丰富的发送消息的方法，包括可靠性投递消息方法、回调监听消息接口ConfirmCallback、返回值确认接口ReturnCallback等等。
 
 ### SimpleMessageListenerContainer
 
-作用: 消息监听容器，采用特定的策略异步消费消息
+> 消息监听容器，采用特定的策略异步消费消息
 
 消息的消费者接收消息可以采用两种方式:
 
@@ -46,7 +40,7 @@ RabbitAdmin底层实现是从Spring容器中获取Exchange、Binding、RoutingKe
 
 ### MessageConverter
 
-作用: 消息转换器，把消息转换成指定的格式
+> 作用: 消息转换器，把消息转换成指定的格式
 
 SimpleMessageConverter(): 转化简单的消息格式
 
@@ -56,7 +50,7 @@ SimpleMessageConverter(): 转化简单的消息格式
 
 - Serializable：contentType 设置为 application/x-java-serialized-object，body 为对象序列化得到的 byte[]
 
-除此之外的其他contentType用此转换器解码原样返回byte[]字节码
+- 除此之外的其他contentType用此转换器解码原样返回byte[]字节码
 
 
 JacksonToJsonMessageConverter(): json格式转换成Java对象转换器
@@ -70,11 +64,11 @@ JacksonToJsonMessageConverter(): json格式转换成Java对象转换器
 
 消息发送者调用toMessage方法把非Message的对象转换成Message, 消息接收者接收到消息调用fromMessage从获取消息并完成消费操作，如下。
 
-发送者
+> 发送者
 
 RabbitTemplate => MessageConverter.toMessage();
 
-接收者
+> 接收者
 
 MessageListenerContainer => MessageConvert.fromMessage();
 
@@ -82,13 +76,19 @@ MessageListenerContainer => MessageConvert.fromMessage();
 
 ### @RabbitListener
 
-指定消息监听的方法，一般搭配@RabbitHandler实现
+> 指定消息监听的方法，一般搭配@RabbitHandler实现
 
-@RabbitListener依赖ListenerContainerFacotory，如果想指定listener的其他信息如：listener接收时消息是什么类型的，可用@Bean的方式用自己的
-ListenerContainerFatory。
+使用@RabbitListener注解并指定queue的名字，将会直接创建监听的节点。
+
+如果没有自定义RabbitListenerContainerFactory，将会由一个默认SimpleRabbitListenerContainerFactory创建一个container。
+
+默认的SimpleRabbitListenerContainerFactory的属性按照全局配置文件application.properties初始化。
+
+你可以在@RabbbitListener主键中的containerFactory指定你自己的消费工厂，前提是工厂必须以@Bean的形式被注入到Spring容器中。
 
 ### @RabbitHandler
-根据消息接受后解码的类型，采用不同的处理方法
+
+> 根据消息接受后解码的类型，采用不同的处理方法，一般搭配 @RabbitListener使用。
 
 
 ### 生产环境的使用方法
@@ -99,6 +99,4 @@ ListenerContainerFatory。
 
 接收端: 
 
-指定MessageListenerContainer（设置符合自己需求配置）
-
-然后用@RabbitListner 搭配@RabbitHander去处理消息
+用@RabbitListner搭配@RabbitHander去处理消息
