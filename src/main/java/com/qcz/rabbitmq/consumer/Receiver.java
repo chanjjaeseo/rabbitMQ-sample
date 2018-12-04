@@ -3,6 +3,7 @@ package com.qcz.rabbitmq.consumer;
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Component
+@EnableRabbit
 public class Receiver {
 
     Logger logger = LoggerFactory.getLogger(getClass());
@@ -27,7 +29,7 @@ public class Receiver {
         channel.basicAck(deliveryTag, true);
     }
 
-    @RabbitListener(queues = "queue01")
+    @RabbitListener(queues = "queue01", containerFactory = "simpleMessageListenerContainer")
     @RabbitHandler
     public void onMessage(@Payload String message, Channel channel, @Headers Map<String, Object> headers) throws IOException {
         logger.info("Message is consuming: {}", message);
