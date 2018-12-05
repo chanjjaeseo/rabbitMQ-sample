@@ -95,8 +95,8 @@ MessageListenerContainer => MessageConvert.fromMessage();
 
 发送端:
 
-一般用RabbitTempldate发送消息(注意指定MessageConvert和接收端一致)
+一般用RabbitTemplate发送消息(注意指定MessageConvert和接收端一致)
 
 接收端: 
 
-用@RabbitListner搭配@RabbitHander去处理消息
+用@RabbitListener搭配@RabbitHandler去处理消息
